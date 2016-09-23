@@ -19,15 +19,10 @@ int main(){
     fp = fopen("td.txt", "r");
     List P1 = Read();
     List P2 = Read();
-
-    // List P3 = Multiply(P1, P2);
-    List P4 = Add(P1, P2);
-
-    // Print(P3);
-
-    Print(P4);
-    // Print(P1);
-    // Print(P2);
+    List P3 = Multiply(P1, P2);
+    // List P4 = Add(P1, P2);
+    Print(P3);
+    // Print(P4);
     // append(P1, P2->Next->coef, P2->Next->expon); 
     // Print(P1);
     fclose(fp);
@@ -37,16 +32,11 @@ int main(){
 void append (List L, int coef, int expon)
 {
     // List rear = L;
-    for (; L->Next ; L = L->Next)
+    for (; L->Next; L = L->Next)
         {
-            if (L->Next->expon < expon)
-                break;
         }
     List Temp = (List)malloc(sizeof(struct Node));
     Temp->Next = L->Next;
-    if (L->Next->expon == expon){
-
-    }
     Temp->coef = coef;
     Temp->expon = expon;
     L->Next = Temp;
@@ -76,7 +66,7 @@ void Print(List L)
 {
     while (L->Next)
     {
-        printf("%d %d    ",L->Next->coef, L->Next->expon );
+        printf("%d %d ",L->Next->coef, L->Next->expon );
         L = L->Next;
     }
     printf("\n");
@@ -91,20 +81,18 @@ List Multiply( List P1, List P2 )
     L->Next = NULL;
     while (L1->Next)
     {
-        int temCoef = L1->Next->coef * L2->Next->coef, temExpon = L1->Next->expon + L2->Next->expon;
+        int temCoef = L1->Next->coef * L2->Next->coef, temExpon = L1->Next->expon * L2->Next->expon;
         append(L, temCoef, temExpon);
         L1 = L1->Next;
     }
     // L1 = P1->Next;
     L2 = L2->Next;
-    // for (; L2->Next; L2->Next = L2->Next->Next)
-    for (; L2->Next; L2 = L2->Next)
+    for (; L2->Next; L2->Next = L2->Next->Next)
     {   
         L1 = P1;
-        // for (; L1->Next; L1->Next = L1->Next->Next)
-        for (; L1->Next; L1 = L1->Next)
+        for (; L1->Next; L1->Next = L1->Next->Next)
         {
-            int temCoef = L1->Next->coef * L2->Next->coef, temExpon = L1->Next->expon + L2->Next->expon;
+            int temCoef = L1->Next->coef * L2->Next->coef, temExpon = L1->Next->expon * L2->Next->expon;
             append(L, temCoef, temExpon);
         }
     }
@@ -125,39 +113,32 @@ List Add ( List P1, List P2 )
         {
             L->Next = L1->Next; 
             // append(L, L1->Next->coef, L1->Next->expon);
-            L1 = L1->Next;
-            // L1->Next = L1->Next->Next;
+            L1->Next = L1->Next->Next;
         }
         else if (L1->Next->expon == L2->Next->expon)
         {
-            L1->Next->coef += L2->Next->coef;
             L->Next = L1->Next;
-            // L->Next->coef = L1->Next->coef + L2->Next->coef;
-            // L1->Next = L1->Next->Next;
-            // L2->Next = L2->Next->Next;
-            L1 = L1->Next;
-            L2 = L2->Next;
+            L->Next->coef = L1->Next->coef + L2->Next->coef;
+            L1->Next = L1->Next->Next;
+            L2->Next = L2->Next->Next;
         }
         else
         {
             L->Next = L2->Next; 
-            // L2->Next = L2->Next->Next;
-            L2 = L2->Next;
+            L2->Next = L2->Next->Next;
         }
         L = L->Next;
     }
     while (L1->Next) 
     {     
         L->Next = L1->Next; 
-        // L1->Next = L1->Next->Next;
-        L1 = L1->Next;
+        L1->Next = L1->Next->Next;
         L = L->Next;
     }
     while (L2->Next) 
     {     
         L->Next = L2->Next; 
-        // L2->Next = L2->Next->Next;
-        L2 = L2->Next;
+        L2->Next = L2->Next->Next;
         L = L->Next;
     }
     
